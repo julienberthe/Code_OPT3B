@@ -1,7 +1,13 @@
 //Fonction poids
-function [pds,dpds]=poids(x,hmin,hmax,tpefct)
+function [pds,dpds]=poids(x,dm,h,tpefct)
   //type de fonction poids
   app=tpefct;
+  
+  //support de la fonction poids
+  hmls=dm*h;
+  
+  //distance relative
+  s=abs(x)/hmls;
   
  // disp('hmin')
     //disp(hmin)
@@ -14,7 +20,7 @@ function [pds,dpds]=poids(x,hmin,hmax,tpefct)
     
   case 'constante';
     //disp('constante')
-    if((x>=hmin) & (x<=hmax))
+    if(s<=1)
         pds=1;
         dpds=0; 
     else
@@ -33,11 +39,9 @@ function [pds,dpds]=poids(x,hmin,hmax,tpefct)
 
     case 'spline quadratique'
     //disp('spline quadratique')
-    if((x>=hmin) & (x<=hmax))
-      hh=abs(hmax-hmin);
-      xx=x/hh;
-        pds=1-6*xx^2+8*xx^3-3*xx^4;
-        dpds=-12*xx+24*xx^2-12*xx^3; 
+    if(s<=1)      
+        pds=1-6*s^2+8*s^3-3*s^4;
+        dpds=-12*s+24*s^2-12*s^3; 
     else
       pds=0;
       dpds=0;
@@ -45,8 +49,8 @@ function [pds,dpds]=poids(x,hmin,hmax,tpefct)
     
    case 'gaussienne';
     //disp('gaussienne')
-    if((x<=-hmin) & (x>=-hmax))
-        pds=(1/(%pi*((hmax-hmin)^2)))*exp((-1)*(x^2));
+    if(s<=1)
+        pds=(1/(%pi*(hmls^2)))*exp((-1)*(s^2));
         dpds=0; 
     else
       pds=0;

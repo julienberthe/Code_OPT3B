@@ -51,13 +51,14 @@ DForme=zeros(nnodes,neval);
 for j=1:neval
     xg=xe(j); 
     //degré du polynôme d'approximation
-    mp=2;
-    //nombre de particules dans la zone d'influence
-    np=3;
+    mp=1;
+    
+    //définition du support de la fonction poids
+    dm=1.1;
     //type de fonction poids (constante, gaussienne, harmonique, spline quadratique)
     tpefct='spline quadratique';
     
-   [phi,dphi] = fMLS(xg,xp,he,mp,np,tpefct);
+   [phi,dphi] = fMLS(xg,xp,h,mp,dm,tpefct);
    //disp(phi)
 
    for i=1:nnodes 
