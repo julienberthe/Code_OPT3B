@@ -1,5 +1,5 @@
 clear all;  
-getf("fGauss.sci"); getf("fEF.sci");
+getf("fGauss.sci"); getf("fEF.sci");getf("fMLS.sci");
 //===============================================================
 // Cas 1D :                                                    //
 // Resolution de l'equation :   u,xx + f = 0                   //
@@ -17,7 +17,11 @@ k0   = 10;           k00=1; if (k0==0) k00=0; k0=1; end
 N=19; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
 // Choix de la Methode: Methode Elements Finis
 // ====================
-MEF=1;
+MEF=0;
+MLSType='constante';
+mp=1;
+np=2;
+
 // Points de Gauss
 // ===============
 [gg,weight,jac] = fGauss(h,ncells); hhg=gg(2)-gg(1);
@@ -32,7 +36,7 @@ for j = 1:length(gg)
    weight1=weight(j);
    // Calcul Phi(xg), dPhi(xg)
    if (MEF==1) [phi,dphi] = fEF(xg,xp,hhg); end;
-   if (MEF==0) [phi,dphi] = fMLS(xg,xp,poids,dmax,dm,MLSType); end;
+   if (MEF==0) [phi,dphi] = fMLS(xg,xp,hhg,mp,np,MLSType); end;
    // Calcul Matrice de rigidite : k et Second Membre : f
    if j == 1
     GG(1:3,1) = -phi(1:3)';

@@ -2,14 +2,11 @@
 // Fonction de Forme MLS
 // ============================================================
 // ============================================================
-function [phiMLS,dphiMLS] = fMLS(xg,xp,he)
-  
+function [phiMLS,dphiMLS] = fMLS(xg,xp,he,mm,nn,tpefct)
   //degré du polynome d'approximation
-  Mp=2;
-  
+  Mp=mm;  
   //Nombre de particules dans la zone d'influences:
-  
-  N=3;
+  N=nn;
   
   // Construction des bornes du support des fonctions de formes
   compt=0;
@@ -28,7 +25,7 @@ function [phiMLS,dphiMLS] = fMLS(xg,xp,he)
   while(compt<N)
     //disp('max')
     maxus=maxus+he;
-    //disp(maxus)
+    //  disp(maxus)
     caca=modulo(100*maxus,1000*he);
     //disp(caca)
     if(caca>9.99)
@@ -75,12 +72,12 @@ function [phiMLS,dphiMLS] = fMLS(xg,xp,he)
   for i=1:length(xp)
     [vecp1,matpp1]=ppt(xp(i),Mp);
     // disp(matpp1)
-    [momo1,mama1]=poids(xg-xp(i),hmin,hmax);//,xg
+    [momo1,mama1]=poids(xp(i)-xg,hmin,hmax,tpefct);//,xg
     //disp(xg-xp(i))
     //disp(momo1);
     A=A+momo1*matpp1;
     Ad=Ad+mama1*matpp1;
-    //disp(A)
+    
   end
   
   //disp(A)
@@ -90,8 +87,11 @@ function [phiMLS,dphiMLS] = fMLS(xg,xp,he)
   Bd=zeros(Mp+1,length(xp));
   for i=1:length(xp)
     [vecp2,matpp2]=ppt(xp(i),Mp);
-    [momo2,mama2]=poids(xg-xp(i),hmin,hmax);//
+    [momo2,mama2]=poids(xp(i)-xg,hmin,hmax,tpefct);
+    disp('vecp')
+    disp(vecp2)
     B(:,i)=momo2*vecp2;
+    //disp(B)
     Bd(:,i)=mama2*vecp2;
     //disp(xg-xp(i))
   end
@@ -100,6 +100,8 @@ function [phiMLS,dphiMLS] = fMLS(xg,xp,he)
   [vecp3,matpp3]=ppt(xg,Mp);
   [vecpd3,matppd3]=dppt(xg,Mp);
   phiMLS=vecp3'*inv(A)*B;
+  //disp(A)
+  //disp(inv(A))
   //dphiMLS=vecpd3'*inv(Ad)*Bd;
   dphiMLS=zeros(length(xp),1);
    

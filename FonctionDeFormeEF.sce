@@ -50,8 +50,16 @@ case 'MLS';
 DForme=zeros(nnodes,neval);
 for j=1:neval
     xg=xe(j); 
-   [phi,dphi] = fMLS(xg,xp,he);
+    //degré du polynôme d'approximation
+    mp=2;
+    //nombre de particules dans la zone d'influence
+    np=3;
+    //type de fonction poids (constante, gaussienne, harmonique, spline quadratique)
+    tpefct='spline quadratique';
+    
+   [phi,dphi] = fMLS(xg,xp,he,mp,np,tpefct);
    //disp(phi)
+
    for i=1:nnodes 
        //disp(phi)
        Forme(i,j)=phi(i);
@@ -60,11 +68,13 @@ for j=1:neval
 end
 y=0.01*ones(1,nnodes);
 //plot2d(xp,y,style=-1);
+
 for i=1:length(xp)
 //  plot2d(xe,Forme(i,:),style=i);
 end
 plot2d(xe,Forme(2,:),style=2);
 plot2d(xe,Forme(6,:),style=5);
+
   
 end
 
