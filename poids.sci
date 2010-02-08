@@ -8,7 +8,7 @@ function [pds,dpds]=poids(x,dm,h,tpefct)
   
   //distance relative
   s=abs(x)/hmls;
-  
+  ss=x/hmls;
  // disp('hmin')
     //disp(hmin)
    // disp('hmax')
@@ -28,25 +28,20 @@ function [pds,dpds]=poids(x,dm,h,tpefct)
       dpds=0;
     end
     
-//  case 'gaussienne'
-//    if((abs(x)/h)<=1)
-//        pds=(1/(%pi*(h^2)))*exp((-1)*(x^2));
-//        dpds=0; 
-//    else
-//      pds=0;
-//      dpds=0;
-//    end
-
-    case 'spline quadratique'
+    case 'spline quadratique';
     //disp('spline quadratique')
     if(s<=1)      
         pds=1-6*s^2+8*s^3-3*s^4;
-        dpds=-12*s+24*s^2-12*s^3; 
+        if (ss>=0)
+          dpds=-12*ss+24*ss^2-12*ss^3; 
+        else
+          dpds=-12*ss-24*ss^2-12*ss^3;
+        end       
     else
       pds=0;
       dpds=0;
-    end
-    
+  end
+     
    case 'gaussienne';
     //disp('gaussienne')
     if(s<=1)
@@ -59,9 +54,10 @@ function [pds,dpds]=poids(x,dm,h,tpefct)
      
   
 case 'harmonique';
-   if((x<=-hmin) & (x>=-hmax))
-        pds=cos(%pi*x);
-        dpds=-sin(%pi*x); 
+  disp('harmonique')
+   if(s<=1)
+        pds=cos(%pi*s);
+        dpds=-sin(%pi*s); 
     else
       pds=0;
       dpds=0;

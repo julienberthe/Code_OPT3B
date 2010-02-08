@@ -5,30 +5,14 @@
 function [phiMLS,dphiMLS] = fMLS(xg,xp,h,mm,dm,tpefct)
   //degré du polynome d'approximation
   Mp=mm;  
- 
-  
 
-  
-  //disp(xg)
-  //disp(hmin)
-  //disp(hmax)
-  //disp(compt)
-  //Support des fonctions de formes
-  
-  //h=(N/2)*(xp(2)-xp(1));
-//  disp('etude')
-//  disp(xg)
-//  disp('hmin')
-//  disp(hmin)
-//  disp('hmax')
-//  disp(hmax)
   
   //construction de l'opérateur A
   A=zeros(Mp+1);
   Ad=zeros(Mp+1);
   for i=1:length(xp)
     [vecp1,matpp1]=ppt(xp(i),Mp);
-    // disp(matpp1)
+    //disp(matpp1)
     [momo1,mama1]=poids(xp(i)-xg,dm,h,tpefct);//,xg
     //disp(xg-xp(i))
     //disp(momo1);
@@ -58,10 +42,9 @@ function [phiMLS,dphiMLS] = fMLS(xg,xp,h,mm,dm,tpefct)
   [vecp3,matpp3]=ppt(xg,Mp);
   [vecpd3,matppd3]=dppt(xg,Mp);
   phiMLS=vecp3'*inv(A)*B;
-  //disp(A)
-  //disp(inv(A))
-  //dphiMLS=vecpd3'*inv(Ad)*Bd;
-  dphiMLS=zeros(length(xp),1);
+  Add=-inv(A)*Ad*inv(A);
+  dphiMLS=vecpd3'*inv(A)*B+vecp3'*inv(A)*Bd+vecp3'*Add*B;
+  //dphiMLS=zeros(length(xp),1);
    
    
    

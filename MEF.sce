@@ -18,9 +18,9 @@ N=19; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
 // Choix de la Methode: Methode Elements Finis
 // ====================
 MEF=0;
-MLSType='constante';
+MLSType='spline quadratique';
 mp=1;
-np=2;
+dm=1.1;
 
 // Points de Gauss
 // ===============
@@ -36,7 +36,7 @@ for j = 1:length(gg)
    weight1=weight(j);
    // Calcul Phi(xg), dPhi(xg)
    if (MEF==1) [phi,dphi] = fEF(xg,xp,hhg); end;
-   if (MEF==0) [phi,dphi] = fMLS(xg,xp,hhg,mp,np,MLSType); end;
+   if (MEF==0) [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType); end;
    // Calcul Matrice de rigidite : k et Second Membre : f
    if j == 1
     GG(1:3,1) = -phi(1:3)';

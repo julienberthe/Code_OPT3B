@@ -5,10 +5,8 @@ function [vecp,matpp]=ppt(x,degm)
   for i=0:degm;
     vecp(i+1)=x^i;
   end
+  
  matpp=vecp*vecp';
- //disp(vecp)
- //disp(vecp')
-//disp(matpp) 
  endfunction
     
     

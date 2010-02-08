@@ -51,10 +51,10 @@ DForme=zeros(nnodes,neval);
 for j=1:neval
     xg=xe(j); 
     //degré du polynôme d'approximation
-    mp=1;
+    mp=2;
     
     //définition du support de la fonction poids
-    dm=1.1;
+    dm=3.1;
     //type de fonction poids (constante, gaussienne, harmonique, spline quadratique)
     tpefct='spline quadratique';
     
@@ -73,8 +73,11 @@ y=0.01*ones(1,nnodes);
 for i=1:length(xp)
 //  plot2d(xe,Forme(i,:),style=i);
 end
-plot2d(xe,Forme(2,:),style=2);
+
+//plot2d(xe,Forme(2,:),style=2);
+//plot2d(xe,DForme(2,:),style=3);
 plot2d(xe,Forme(6,:),style=5);
+plot2d(xe,DForme(6,:),style=6);
 
   
 end
