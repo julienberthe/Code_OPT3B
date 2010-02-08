@@ -47,7 +47,7 @@ plot2d(xe,Forme(5,:),style=5);
 
 case 'MLS';
   Forme=zeros(nnodes,neval);
-DForme=zeros(nnodes,neval);
+  DForme=zeros(nnodes,neval);
 for j=1:neval
     xg=xe(j); 
     //degré du polynôme d'approximation

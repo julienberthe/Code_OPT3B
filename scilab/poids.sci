@@ -9,12 +9,7 @@ function [pds,dpds]=poids(x,dm,h,tpefct)
   //distance relative
   s=abs(x)/hmls;
   ss=x/hmls;
- // disp('hmin')
-    //disp(hmin)
-   // disp('hmax')
-   // disp(hmax)
-   // disp('x')
-    //disp(x)
+
     
   select app;
     
