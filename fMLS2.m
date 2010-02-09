@@ -37,6 +37,8 @@ end
 %%construction des phi et dphi
 %vecp
 phiMLS=vecp'*inv(A)*B;
+
+
 invAd=-inv(A)*Ad*inv(A);
 dphiMLS=vecpd'*inv(A)*B+vecp'*inv(A)*Bd+vecp'*invAd*B;
 

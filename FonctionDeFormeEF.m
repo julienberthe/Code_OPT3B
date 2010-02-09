@@ -45,10 +45,10 @@ case 'MLS';
 for j=1:neval
     xg=xe(j); 
     %degré du polynôme d'approximation
-    mp=2;
+    mp=1;
     
     %définition du support de la fonction poids
-    dm=3.1;
+    dm=1.1;
     %type de fonction poids (constante, gaussienne, harmonique, spline quadratique)
     tpefct='spline quadratique';
     
