@@ -22,11 +22,9 @@ for ii=1:length(xp)
    %evaluation de la fonction poids
    [pds,dpds]=poids(xg-xp(ii),dm,h,tpefct);
    %construction de B et Bd
-   disp('1')
-   ii
+   
    B(:,ii)=pds*vecp;
-   disp('2')
-   ii
+   
    Bd(:,ii)=dpds*vecp;
 end
 

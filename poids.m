@@ -30,10 +30,10 @@ function [pds,dpds]=poids(x,dm,h,tpefct)
         pds=1-6*s^2+8*s^3-3*s^4;
         if (ss>=0)            
             %disp('pos')
-          dpds=-12*ss+24*ss^2-12*ss^3; 
+          dpds=(-12*ss+24*ss^2-12*ss^3)/hmls; 
         else
             %disp('neg')
-          dpds=-12*ss-24*ss^2-12*ss^3;
+          dpds=-(12*ss+24*ss^2+12*ss^3)/hmls;
         end       
     else
       pds=0;
