@@ -1,4 +1,4 @@
-clear all; clf; 
+clear all; clf; close all;
 %===================================================
 % Cas 1D Lineaire                                 %
 % Calcul et Tracer des Fonctions de Forme EF      %
@@ -52,15 +52,24 @@ for j=1:neval
     %type de fonction poids (constante, gaussienne, harmonique, spline quadratique)
     tpefct='spline quadratique';
     
-   [phi,dphi] = fMLS2(xg,xp,h,mp,dm,tpefct);
+   [phi,dphi] = fMLS(xg,xp,h,mp,dm,tpefct);
    %disp(phi)
 
    for i=1:nnodes 
        %disp(phi)
        Forme(i,j)=phi(i);
-       DForme(i,j)=dphi(i);
    end;
 end
+for i=1:nnodes
+    for j=1:neval
+if(j<neval)
+       DForme(i,j)=(Forme(i,j+1)-Forme(i,j))/he;
+       %else
+       %DForme(i,:)=dphi(i);
+       end
+       DForme(i,neval)=(Forme(i,neval)-Forme(i,neval-1))/he;
+    end
+end;
 clear phi; clear dphi;
 y=0.01*ones(1,nnodes);
 %plot2d(xp,y,style=-1);
@@ -72,9 +81,9 @@ end
 %plot2d(xe,Forme(2,:),style=2);
 %plot2d(xe,DForme(2,:),style=3);
 hold on;
-plot(xe,Forme(5,:),'r');
+plot(xe,Forme(5,:),'g');
 hold on;
-plot(xe,DForme(5,:),'b');
+plot(xe,DForme(5,:),'r');
 
   
 end
@@ -93,8 +102,8 @@ if (N==10)
 	end
     end
     hold on;
-	plot(xe,sol);
+	plot(xe,sol,'b');
     hold on;
-	plot(xp,u);
+	plot(xp,u,'m');
 end
 

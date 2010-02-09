@@ -20,6 +20,7 @@ function [phiMLS,dphiMLS] = fMLS(xg,xp,h,mm,dm,tpefct)
     
   end
   
+  %disp(A)
   
   %construction de l'opÃ©rteur B
   B=zeros(Mp+1,length(xp));
@@ -47,11 +48,40 @@ end
   %xg
   phiMLS=vecp3'*inv(A)*B;
   Add=-inv(A)*Ad*inv(A);
-  dphiMLS=vecpd3'*inv(A)*B+vecp3'*inv(A)*Bd+vecp3'*Add*B;
+  %disp('premier terme')
+  %vecpd3'*inv(A)*B
+  %phiMLS
+  %vecpd3'
+  %A
+  %inv(A)
+  %disp('deuxième terme')
+  %vecp3'*inv(A)*Bd
+  %Bd
+  %disp('troisième terme')
+  %vecp3'*Add*B
+  %vecp3'*Add
+  %vecpd3'*inv(A)
+  %inv(A)*Ad*inv(A)
+  %B
+%   vecpd3'
+%   inv(A)*B
+%   B
+%   inv(A)
+%   cond(A)
+% if(mm>1)
+%   for j=2:(length(phiMLS)-1)
+%       %dphiMLS(1,j)=(phiMLS(1,j+1)+phiMLS(1,j-1)-2*phiMLS(1,j))/(2*h);
+%     dphiMLS(1,j)=(phiMLS(1,j+1)-phiMLS(1,j))/(h);
+%   end
+%   %dphiMLS(1,1)=(phiMLS(1,2)-phiMLS(1,1))/h;
+%   dphiMLS(1,length(phiMLS))=(phiMLS(1,length(phiMLS))-phiMLS(1,length(phiMLS)-1))/h;
+% else
+  dphiMLS=vecpd3'*inv(A)*B+vecp3'*inv(A)*Bd+vecp3'*Add*B;%vecpd3'*inv(A)*B+
   %dphiMLS=zeros(length(xp),1);
    %Bd
    %B
-   
-
+%end
+%dphiMLS
+%h
 
 end
