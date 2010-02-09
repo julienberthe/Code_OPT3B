@@ -12,7 +12,7 @@ function [phiMLS,dphiMLS] = fMLS(xg,xp,h,mm,dm,tpefct)
   for i=1:length(xp)
     [vecp1,matpp1]=ppt(xp(i),Mp);
     %disp(matpp1)
-    [momo1,mama1]=poids(xp(i)-xg,dm,h,tpefct);
+    [momo1,mama1]=poids(xg-xp(i),dm,h,tpefct);
     %disp(xg-xp(i))
     %disp(momo1);
     A=A+momo1*matpp1;
@@ -20,14 +20,13 @@ function [phiMLS,dphiMLS] = fMLS(xg,xp,h,mm,dm,tpefct)
     
   end
   
-  %disp(A)
   
   %construction de l'opérteur B
   B=zeros(Mp+1,length(xp));
   Bd=zeros(Mp+1,length(xp));
   for i=1:length(xp)
     [vecp2,matpp2]=ppt(xp(i),Mp);
-    [momo2,mama2]=poids(xp(i)-xg,dm,h,tpefct);
+    [momo2,mama2]=poids(xg-xp(i),dm,h,tpefct);
     %disp('vecp')
     %disp(momo2)
     B(:,i)=momo2*vecp2;
@@ -50,8 +49,8 @@ end
   Add=-inv(A)*Ad*inv(A);
   dphiMLS=vecpd3'*inv(A)*B+vecp3'*inv(A)*Bd+vecp3'*Add*B;
   %dphiMLS=zeros(length(xp),1);
-   Bd
-   B
+   %Bd
+   %B
    
 
 

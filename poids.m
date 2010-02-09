@@ -25,17 +25,22 @@ function [pds,dpds]=poids(x,dm,h,tpefct)
     
     case 'spline quadratique';
     %disp('spline quadratique')
+    %ss
     if(s<=1)      
         pds=1-6*s^2+8*s^3-3*s^4;
         if (ss>=0)            
+            %disp('pos')
           dpds=-12*ss+24*ss^2-12*ss^3; 
         else
+            %disp('neg')
           dpds=-12*ss-24*ss^2-12*ss^3;
         end       
     else
       pds=0;
       dpds=0;
-  end
+    end
+  %pds
+  %dpds
      
    case 'gaussienne';
     %disp('gaussienne')

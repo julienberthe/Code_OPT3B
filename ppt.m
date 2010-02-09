@@ -2,11 +2,12 @@
 
 function [vecp,matpp]=ppt(xx,degm)
   vecp=zeros(degm+1,1);
-  for i=0:degm;
-    vecp(i+1)=xx^i;
+  for jj=0:degm;
+    vecp(jj+1)=xx^jj;
   end
   
  matpp=vecp*vecp';
+ 
 end
     
     

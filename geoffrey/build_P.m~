@@ -1,0 +1,3 @@
+function [p,pX] = build_P(x)
+p=[1,x,x^2];
+pX=[0,1,2*x];

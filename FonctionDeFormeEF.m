@@ -52,7 +52,7 @@ for j=1:neval
     %type de fonction poids (constante, gaussienne, harmonique, spline quadratique)
     tpefct='spline quadratique';
     
-   [phi,dphi] = fMLS(xg,xp,h,mp,dm,tpefct);
+   [phi,dphi] = fMLS2(xg,xp,h,mp,dm,tpefct);
    %disp(phi)
 
    for i=1:nnodes 
@@ -72,9 +72,9 @@ end
 %plot2d(xe,Forme(2,:),style=2);
 %plot2d(xe,DForme(2,:),style=3);
 hold on;
-plot(xe,Forme(6,:));
+plot(xe,Forme(5,:),'r');
 hold on;
-plot(xe,DForme(6,:));
+plot(xe,DForme(5,:),'b');
 
   
 end

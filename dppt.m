@@ -2,11 +2,11 @@
 
 function [vecpd,matppd]=dppt(xx,degm)
   vecpd=zeros(degm+1,1);
-  for i=0:degm
-    if(i==0);
-      vecpd(i+1)=0;
+  for iii=0:degm
+    if(iii==0);
+      vecpd(iii+1)=0;
     else
-     vecpd(i+1)=xx^(i-1);
+     vecpd(iii+1)=xx^(iii-1);
    end
    
   end
