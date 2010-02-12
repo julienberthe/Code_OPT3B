@@ -21,7 +21,7 @@ he=h/10;
 MEFvar=0;
 MLSType='spline quadratique';
 DER=0; %calcul des dérivées exactes (1, seulement pour mp=1) ou par différences centrées (0)
-enri=0;  %enrichissement (1) ou non (0)
+enri=1;  %enrichissement (1) ou non (0)
 mp=2;
 dm=3.1;
 
@@ -148,7 +148,7 @@ plot(xe,solreel,'b');
 %%Erreur sur la solution
 erreur=zeros(size(sol,1),1);
 for ii=1:size(sol,1)
-    erreur(ii)=abs(solreel(ii,1)-sol(ii,1))/solreel(ii,1);
+    erreur(ii)=abs(solreel(ii,1)-sol(ii,1));%/solreel(ii,1);
 end
 
 figure;
