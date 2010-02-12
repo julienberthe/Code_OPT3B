@@ -14,14 +14,16 @@ clear all;clf;close all;
 T    = -2;   d = 30; L=1; b=3;a=-1;c=1/0.04;
 k0   = 10;           k00=1; if (k0==0) k00=0; k0=1; end
 % Nombre de Particules : Discretisation
-N=50; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
+N=5; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
 he=h/10;
 % Choix de la Methode: Methode Elements Finis
 % ====================
 MEFvar=0;
 MLSType='spline quadratique';
-mp=1;
-dm=8.1;
+DER=0; %calcul des dérivées exactes (1, seulement pour mp=1) ou par différences centrées (0)
+enri=1;  %enrichissement (1) ou non (0)
+mp=3;
+dm=4.1;
 
 % Points de Gauss
 % ===============
@@ -32,13 +34,13 @@ dm=8.1;
 k  = zeros(nnodes) ; f  = zeros(nnodes,1);  GG = zeros(nnodes,1);
 % Boucle sur les points de Gauss
 % ==============================
-if(MEFvar==1)
+if(MEFvar==1 || DER==1)    
 for j = 1:length(gg)
    xg = gg(j);
    weight1=weight(j);
    % Calcul Phi(xg), dPhi(xg)
    if (MEFvar==1) [phi,dphi] = fEF(xg,xp,hhg); end;
-   if (MEFvar==0) [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType); end;
+   if (MEFvar==0&&DER==1) [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType,enri); end;
    % Calcul Matrice de rigidite : k et Second Membre : f
    if j == 1
     GG(1:3,1) = -phi(1:3)';
@@ -57,11 +59,12 @@ for j = 1:length(gg)
 end
 end
 
-if(MEFvar==0)
+if(MEFvar==0&&DER==0)  %Calcul des fonctions de forme par différences centrées
+    disp('Différences centrées')
     for j = 1:length(gg)
         xg = gg(j);
         %weight1=weight(j);
-        [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType);
+        [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType,enri);
         for i=1:nnodes 
             %disp(phi)
             Forme(i,j)=phi(i);
@@ -74,6 +77,8 @@ if(MEFvar==0)
             %else
             %DForme(i,:)=dphi(i);
             end
+            %%dérivées des fonctions de forme calculées par différence
+            %%finie
         DForme(i,length(gg))=(Forme(i,length(gg))-Forme(i,length(gg)-1))/(gg(length(gg))-gg(length(gg)-1));
         end
     end;
@@ -123,7 +128,7 @@ xe = [0.0:he:1.0];
 for j = 1:length(xe)
    xg  = xe(j); 
    if (MEFvar==1) [phi,dphi] = fEF(xg,xp,hhg); end;
-   if (MEFvar==0) [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType); end;
+   if (MEFvar==0) [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType,enri); end;
    for i=1:nnodesT Forme2(j,i)=phi(i); end;
 end
 % Construction de la solution u=Sum_i u_i Forme_i
