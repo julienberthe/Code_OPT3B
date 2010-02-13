@@ -18,13 +18,13 @@ N=50; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
 he=h/10;
 % Choix de la Methode: Methode Elements Finis
 % ====================
-MEFvar=1;
+MEFvar=0;
 MLSType='spline quadratique';
 DER=0; %calcul des dérivées exactes (1, seulement pour mp=1) ou par différences centrées (0)
 enri=1;  %enrichissement (1) ou non (0)
-PUM=1;  %PUM si 1 rien si 0
+PUM=0;  %PUM si 1 rien si 0
 mp=2;
-dm=2.1;
+dm=3.1;
 
 % Points de Gauss
 % ===============
@@ -138,6 +138,7 @@ if(PUM==1)
         weight1=weight(j);
         if j == 1
             GG(1:3,1) = -Forme(1:3,j);
+            GG(nnodes+1:nnodes+3,1) = -Forme(nnodes+1:nnodes+3,j);
             k = k+k00*k0*Forme(:,j)*Forme(:,j)';
         else
             if j<length(gg)
