@@ -14,16 +14,17 @@ clear all;clf;close all;
 T    = -2;   d = 30; L=1; b=3;a=-1;c=1/0.04;
 k0   = 10;           k00=1; if (k0==0) k00=0; k0=1; end
 % Nombre de Particules : Discretisation
-N=5; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
+N=50; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
 he=h/10;
 % Choix de la Methode: Methode Elements Finis
 % ====================
-MEFvar=0;
+MEFvar=1;
 MLSType='spline quadratique';
 DER=0; %calcul des dérivées exactes (1, seulement pour mp=1) ou par différences centrées (0)
 enri=1;  %enrichissement (1) ou non (0)
+PUM=1;  %PUM si 1 rien si 0
 mp=2;
-dm=3.1;
+dm=2.1;
 
 % Points de Gauss
 % ===============
@@ -31,7 +32,11 @@ dm=3.1;
 % ==========================
 % Initialistion des Matrices : Mise a Zero
 % ==========================
+if(PUM==0)
 k  = zeros(nnodes) ; f  = zeros(nnodes,1);  GG = zeros(nnodes,1);
+else
+k  = zeros(2*nnodes) ; f  = zeros(2*nnodes,1);  GG = zeros(2*nnodes,1);
+end
 % Boucle sur les points de Gauss
 % ==============================
 if(MEFvar==1 || DER==1)    
@@ -41,21 +46,27 @@ for j = 1:length(gg)
    % Calcul Phi(xg), dPhi(xg)
    if (MEFvar==1) [phi,dphi] = fEF(xg,xp,hhg); end;
    if (MEFvar==0&&DER==1) [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType,enri); end;
+   for i=1:nnodes 
+            %disp(phi)
+            Forme(i,j)=phi(i);
+        end;
    % Calcul Matrice de rigidite : k et Second Membre : f
+   if(PUM==0)
    if j == 1
     GG(1:3,1) = -phi(1:3)';
-    k = k+k00*k0*phi'*phi;
+    k(1:nnodes,1:nnodes) = k(1:nnodes,1:nnodes)+k00*k0*phi'*phi;
    else
 	 	if j<length(gg)
-	    	 k = k+(weight1*jac)*(dphi'*dphi);
+	    	 k(1:nnodes,1:nnodes) = k(1:nnodes,1:nnodes)+(weight1*jac)*(dphi'*dphi);
         %fbody=6*d*xg ;
         fbody= 6*d*xg+b*c*c*cos(c*(xg-a));
-	     	f = f+(weight1*fbody*jac)*phi';
+	     	f(1:nnodes,1) = f(1:nnodes,1)+(weight1*fbody*jac)*phi';
 	   end
 	   if j==length(gg)
-	     f= f+T*phi';
+	     f(1:nnodes,1)= f(1:nnodes,1)+T*phi';
 	   end
-  end
+   end
+   end
 end
 end
 
@@ -71,6 +82,46 @@ if(MEFvar==0&&DER==0)  %Calcul des fonctions de forme par différences centrées
         end;
     end
     for i=1:nnodes
+        for j=1:length(gg)
+            if(j<length(gg))
+            DForme(i,j)=(Forme(i,j+1)-Forme(i,j))/(gg(j+1)-gg(j));
+            %else
+            %DForme(i,:)=dphi(i);
+            end
+            %%dérivées des fonctions de forme calculées par différence
+            %%finie
+        DForme(i,length(gg))=(Forme(i,length(gg))-Forme(i,length(gg)-1))/(gg(length(gg))-gg(length(gg)-1));
+        end
+    end;
+    if(PUM==0)
+    for j = 1:length(gg)
+        xg = gg(j);
+        weight1=weight(j);
+        if j == 1
+            GG(1:3,1) = -Forme(1:3,j);
+            k(1:nnodes,1:nnodes) = k(1:nnodes,1:nnodes)+k00*k0*Forme(:,j)*Forme(:,j)';
+        else
+            if j<length(gg)
+                k(1:nnodes,1:nnodes) = k(1:nnodes,1:nnodes)+(weight1*jac)*(DForme(:,j)*DForme(:,j)');
+                %fbody=6*d*xg ;
+                fbody= 6*d*xg+b*c*c*cos(c*(xg-a));
+                f(1:nnodes,1) = f(1:nnodes,1)+(weight1*fbody*jac)*Forme(:,j);
+            end
+            if j==length(gg)
+            f(1:nnodes,1)= f(1:nnodes,1)+T*Forme(:,j);
+            end
+        end
+    end
+    end
+end
+
+if(PUM==1)
+    for i = 1:nnodes
+        for j=1:length(gg)
+            Forme(i+nnodes,j)=Forme(i,j)*(cos((j)*(1/c)+25));%(1/c)
+        end;
+    end;
+    for i=1:2*nnodes
         for j=1:length(gg)
             if(j<length(gg))
             DForme(i,j)=(Forme(i,j+1)-Forme(i,j))/(gg(j+1)-gg(j));
@@ -100,7 +151,11 @@ if(MEFvar==0&&DER==0)  %Calcul des fonctions de forme par différences centrées
             end
         end
     end
+    
+        
+    
 end
+    
 
 
 % ==========
@@ -129,7 +184,12 @@ for j = 1:length(xe)
    xg  = xe(j); 
    if (MEFvar==1) [phi,dphi] = fEF(xg,xp,hhg); end;
    if (MEFvar==0) [phi,dphi] = fMLS(xg,xp,h,mp,dm,MLSType,enri); end;
-   for i=1:nnodesT Forme2(j,i)=phi(i); end;
+   if(PUM==0)
+   for i=1:(nnodesT) Forme2(j,i)=phi(i); end;
+   else
+       for i=1:(nnodesT/2) Forme2(j,i)=phi(i); end;
+       for i=1:(nnodesT/2) Forme2(j,i+(nnodesT/2))=Forme2(j,i)*(cos((j)*(1/c)+25)); end;
+   end
 end
 % Construction de la solution u=Sum_i u_i Forme_i
 sol=zeros(length(xe),1);
@@ -143,6 +203,10 @@ figure;
 plot(xe,sol,'g');
 hold on;
 plot(xe,solreel,'b');
+% hold on;
+% plot(xe,Forme2(:,5),'r');
+% hold on;
+% plot(xe,Forme2(:,16),'m');
 
 
 %%Erreur sur la solution
