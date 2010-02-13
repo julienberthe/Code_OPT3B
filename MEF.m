@@ -22,9 +22,9 @@ MEFvar=0;
 MLSType='spline quadratique';
 DER=0; %calcul des dérivées exactes (1, seulement pour mp=1) ou par différences centrées (0)
 enri=1;  %enrichissement (1) ou non (0)
-PUM=0;  %PUM si 1 rien si 0
-mp=2;
-dm=3.1;
+PUM=1;  %PUM si 1 rien si 0
+mp=3;
+dm=5.1;
 
 % Points de Gauss
 % ===============
@@ -118,7 +118,7 @@ end
 if(PUM==1)
     for i = 1:nnodes
         for j=1:length(gg)
-            Forme(i+nnodes,j)=Forme(i,j)*(cos((j)*(1/c)+25));%(1/c)
+            Forme(i+nnodes,j)=Forme(i,j)*(cos(c*(gg(j)-a)));%(1/c)
         end;
     end;
     for i=1:2*nnodes
@@ -189,7 +189,7 @@ for j = 1:length(xe)
    for i=1:(nnodesT) Forme2(j,i)=phi(i); end;
    else
        for i=1:(nnodesT/2) Forme2(j,i)=phi(i); end;
-       for i=1:(nnodesT/2) Forme2(j,i+(nnodesT/2))=Forme2(j,i)*(cos((j)*(1/c)+25)); end;
+       for i=1:(nnodesT/2) Forme2(j,i+(nnodesT/2))=Forme2(j,i)*(cos(c*(xg-a))); end;
    end
 end
 % Construction de la solution u=Sum_i u_i Forme_i
