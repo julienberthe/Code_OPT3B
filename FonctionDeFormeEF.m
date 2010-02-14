@@ -48,26 +48,27 @@ for j=1:neval
     mp=1;
     
     %définition du support de la fonction poids
-    dm=1.1;
+    dm=2.1;
     %type de fonction poids (constante, gaussienne, harmonique, spline quadratique)
     tpefct='spline quadratique';
     
-   [phi,dphi] = fMLS(xg,xp,h,mp,dm,tpefct);
+   [phi,dphi] = fMLS(xg,xp,h,mp,dm,tpefct,0);
    %disp(phi)
 
    for i=1:nnodes 
        %disp(phi)
        Forme(i,j)=phi(i);
+       DForme(i,j)=dphi(i);
    end;
 end
 for i=1:nnodes
     for j=1:neval
 if(j<neval)
-       DForme(i,j)=(Forme(i,j+1)-Forme(i,j))/he;
+       %DForme(i,j)=(Forme(i,j+1)-Forme(i,j))/he;
        %else
        %DForme(i,:)=dphi(i);
        end
-       DForme(i,neval)=(Forme(i,neval)-Forme(i,neval-1))/he;
+      % DForme(i,neval)=(Forme(i,neval)-Forme(i,neval-1))/he;
     end
 end;
 clear phi; clear dphi;
@@ -81,7 +82,7 @@ end
 %plot2d(xe,Forme(2,:),style=2);
 %plot2d(xe,DForme(2,:),style=3);
 hold on;
-plot(xe,Forme(5,:),'g');
+plot(xe,Forme(5,:),'b');
 hold on;
 plot(xe,DForme(5,:),'r');
 
@@ -102,8 +103,8 @@ if (N==10)
 	end
     end
     hold on;
-	plot(xe,sol,'b');
+	%plot(xe,sol,'b');
     hold on;
-	plot(xp,u,'m');
+	%plot(xp,u,'m');
 end
 
