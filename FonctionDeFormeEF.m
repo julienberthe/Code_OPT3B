@@ -45,14 +45,14 @@ case 'MLS';
 for j=1:neval
     xg=xe(j); 
     %degré du polynôme d'approximation
-    mp=1;
+    mp=2;
     
     %définition du support de la fonction poids
-    dm=2.1;
+    dm=3.1;
     %type de fonction poids (constante, gaussienne, harmonique, spline quadratique)
     tpefct='spline quadratique';
     
-   [phi,dphi] = fMLS(xg,xp,h,mp,dm,tpefct,0);
+   [phi,dphi] = fMLS(xg,xp,h,mp,dm,tpefct,1);
    %disp(phi)
 
    for i=1:nnodes 
@@ -64,11 +64,11 @@ end
 for i=1:nnodes
     for j=1:neval
 if(j<neval)
-       %DForme(i,j)=(Forme(i,j+1)-Forme(i,j))/he;
+       DForme(i,j)=(Forme(i,j+1)-Forme(i,j))/he;
        %else
        %DForme(i,:)=dphi(i);
        end
-      % DForme(i,neval)=(Forme(i,neval)-Forme(i,neval-1))/he;
+       DForme(i,neval)=(Forme(i,neval)-Forme(i,neval-1))/he;
     end
 end;
 clear phi; clear dphi;

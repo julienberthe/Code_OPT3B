@@ -14,17 +14,17 @@ clear all;clf;close all;
 T    = -2;   d = 30; L=1; b=3;a=-1;c=1/0.04;
 k0   = 10;           k00=1; if (k0==0) k00=0; k0=1; end
 % Nombre de Particules : Discretisation
-N=50; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
+N=5; h=1/N; xp = [0.0:h:1.0]; nnodes = length(xp); ncells = nnodes-1;
 he=h/10;
 % Choix de la Methode: Methode Elements Finis
 % ====================
-MEFvar=0;
+MEFvar=0;   %0: MLS et 1: EF
 MLSType='spline quadratique';
 DER=0; %calcul des dérivées exactes (1, seulement pour mp=1) ou par différences centrées (0)
 enri=1;  %enrichissement (1) ou non (0)
-PUM=1;  %PUM si 1 rien si 0
-mp=3;
-dm=5.1;
+PUM=0;  %PUM si 1 rien si 0
+mp=1;
+dm=2.1;
 
 % Points de Gauss
 % ===============
@@ -213,7 +213,7 @@ plot(xe,solreel,'b');
 %%Erreur sur la solution
 erreur=zeros(size(sol,1),1);
 for ii=1:size(sol,1)
-    erreur(ii)=abs(solreel(ii,1)-sol(ii,1));%/solreel(ii,1);
+    erreur(ii)=abs(solreel(ii,1)-sol(ii,1))/solreel(ii,1);
 end
 
 figure;

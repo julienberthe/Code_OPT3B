@@ -14,7 +14,7 @@ end
     end   
   end
   if(enri~=0)
-      vecpd(degm+2)=-sin(1/0.04*xx);
+      vecpd(degm+2)=-25*sin(1/0.04*xx);
       %vecpd(degm+3)=cos(1/0.04*xx);
   end
       
