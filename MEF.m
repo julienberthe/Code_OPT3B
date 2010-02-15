@@ -23,8 +23,8 @@ MLSType='spline quadratique';
 DER=0; %calcul des dérivées exactes (1, seulement pour mp=1) ou par différences centrées (0)
 enri=1;  %enrichissement (1) ou non (0)
 PUM=0;  %PUM si 1 rien si 0
-mp=1;
-dm=2.1;
+mp=3;
+dm=4.1;
 
 % Points de Gauss
 % ===============
