@@ -21,10 +21,13 @@ he=h/10;
 MEFvar=0;   %0: MLS et 1: EF
 MLSType='spline quadratique';
 DER=0; %calcul des dérivées exactes (1, seulement pour mp=1) ou par différences centrées (0)
-enri=1;  %enrichissement (1) ou non (0)
-PUM=0;  %PUM si 1 rien si 0
-mp=1;
-dm=2.1;
+enri=0;  %enrichissement (1) ou non (0)
+PUM=1;  %PUM si 1 rien si 0
+local=0;  %enrichissement local
+loc_inf=0.39999;
+loc_sup=0.81111;
+mp=2;
+dm=5.1;
 
 % Points de Gauss
 % ===============
@@ -118,7 +121,15 @@ end
 if(PUM==1)
     for i = 1:nnodes
         for j=1:length(gg)
-            Forme(i+nnodes,j)=Forme(i,j)*(cos(c*(gg(j)-a)));%(1/c)
+            if(local==1)
+                if(loc_inf<gg(j)<loc_sup)
+                    Forme(i+nnodes,j)=Forme(i,j)*(cos(c*(gg(j)-a)));
+                else
+                    Forme(i+nnodes,j)=0;%Forme(i,j);
+                end
+            else                
+                Forme(i+nnodes,j)=Forme(i,j)*(cos(c*(gg(j)-a)));%(1/c)
+            end
         end;
     end;
     for i=1:2*nnodes
@@ -189,7 +200,17 @@ for j = 1:length(xe)
    for i=1:(nnodesT) Forme2(j,i)=phi(i); end;
    else
        for i=1:(nnodesT/2) Forme2(j,i)=phi(i); end;
-       for i=1:(nnodesT/2) Forme2(j,i+(nnodesT/2))=Forme2(j,i)*(cos(c*(xg-a))); end;
+       for i=1:(nnodesT/2) 
+           if(local==1)
+               if(loc_inf<xg<loc_sup)
+                    Forme2(j,i+(nnodesT/2))=Forme2(j,i)*(cos(c*(xg-a))); 
+               else
+                    Forme2(j,i+(nnodesT/2))=0;%Forme2(j,i);
+               end
+           else
+               Forme2(j,i+(nnodesT/2))=Forme2(j,i)*(cos(c*(xg-a)));
+           end
+       end;
    end
 end
 % Construction de la solution u=Sum_i u_i Forme_i
